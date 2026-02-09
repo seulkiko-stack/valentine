@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>발렌타인 데이트 신청</title>
+
+  <!-- Confetti library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg1: #ffe5f0;
+      --bg2: #fff0f8;
+      --bg3: #ffeef6;
+      --card: #ffffff;
+      --cardShadow: rgba(255, 182, 193, 0.25);
+      --yes: #ff6b9d;
+      --yesHover: #ff4d8a;
+      --yesLight: #ffb3d1;
+      --input: #fff8fc;
+      --inputBorder: #ffcfe0;
+      --inputFocus: #ff6b9d;
+      --text: #5a3a4a;
+      --textLight: #8b6b7a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--bg2) 0%, var(--bg1) 50%, var(--bg3) 100%);
+      background-attachment: fixed;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+      overflow-x: hidden;
+      padding: 16px;
+      position: relative;
+    }
+
+    /* FLOATING HEARTS BACKGROUND */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 192, 203, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 182, 193, 0.2) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* FULL-SCREEN CONFETTI CANVAS */
+    #confettiCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      width: min(720px, 92vw);
+      padding: 32px 28px 100px;
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      border-radius: 32px;
+      text-align: center;
+      box-shadow: 
+        0 20px 60px var(--cardShadow),
+        0 0 0 1px rgba(255, 182, 193, 0.1);
+      position: relative;
+      z-index: 1;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .art {
+      width: min(280px, 75vw);
+      margin: 0 auto 16px;
+      display: block;
+      filter: drop-shadow(0 8px 20px rgba(255, 107, 157, 0.2));
+      animation: heartbeat 2s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    h1 {
+      font-size: clamp(26px, 4.5vw, 42px);
+      margin: 16px 0 20px;
+      line-height: 1.4;
+      word-break: keep-all;
+      color: var(--text);
+      font-weight: 700;
+      text-shadow: 0 2px 8px rgba(255, 182, 193, 0.2);
+    }
+
+    /* NAME INPUT FORM */
+    .name-form {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .name-form.active {
+      display: block;
+    }
+
+    .input-group {
+      margin: 20px 0;
+    }
+
+    .input-label {
+      display: block;
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .name-input {
+      width: 100%;
+      max-width: 400px;
+      padding: 16px 20px;
+      font-size: 18px;
+      border: 3px solid var(--inputBorder);
+      border-radius: 20px;
+      background: var(--input);
+      font-family: inherit;
+      transition: all 0.3s ease;
+      color: var(--text);
+    }
+
+    .name-input:focus {
+      outline: none;
+      border-color: var(--inputFocus);
+      box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .name-input::placeholder {
+      color: var(--textLight);
+      opacity: 0.6;
+    }
+
+    .submit-btn {
+      margin-top: 20px;
+      padding: 16px 40px;
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--yes) 0%, var(--yesHover) 100%);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 
+        0 8px 24px rgba(255, 107, 157, 0.4),
+        0 0 0 0 rgba(255, 107, 157, 0.5);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn::before {
+      content: '💕';
+      position: absolute;
+      left: 20px;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 12px 32px rgba(255, 107, 157, 0.5),
+        0 0 0 8px rgba(255, 107, 157, 0.1);
+    }
+
+    .submit-btn:active {
+      transform: translateY(-1px);
+    }
+
+    /* DATE REQUEST SECTION */
+    .date-request {
+      display: none;
+    }
+
+    .date-request.active {
+      display: block;
+    }
+
+    .button-zone {
+      position: relative;
+      width: min(520px, 92%);
+      height: 150px;
+      margin: 0 auto;
+      touch-action: none;
+    }
+
+    button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 18px 32px;
+      font-size: 18px;
+      font-weight: 700;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,.12);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: all 0.3s ease;
+    }
+
+    #yesBtn {
+      left: 18%;
+      background: linear-gradient(135deg, var(--yes) 0%, var(--yesHover) 100%);
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(255, 107, 157, 0.4);
+    }
+    #yesBtn:hover { 
+      background: linear-gradient(135deg, var(--yesHover) 0%, var(--yes) 100%);
+      transform: translateY(-50%) scale(1.05);
+      box-shadow: 0 12px 32px rgba(255, 107, 157, 0.5);
+    }
+
+    #noBtn {
+      left: 62%;
+      background: linear-gradient(135deg, #f5e6f0 0%, #e8d5e0 100%);
+      color: var(--text);
+      box-shadow: 0 8px 20px rgba(139, 107, 122, 0.2);
+    }
+    #noBtn:hover {
+      background: linear-gradient(135deg, #e8d5e0 0%, #f5e6f0 100%);
+    }
+
+    .hint {
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--textLight);
+      font-weight: 500;
+    }
+
+    .result {
+      display: none;
+      margin-top: 24px;
+      animation: pop .5s ease;
+    }
+
+    .result h2 {
+      font-size: clamp(32px, 5vw, 48px);
+      margin: 16px 0;
+      color: var(--text);
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--yes) 0%, var(--yesHover) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .fireworks {
+      width: min(400px, 90vw);
+      margin: 0 auto;
+      display: block;
+      border-radius: 20px;
+    }
+
+    /* SHARE LINK BUTTON */
+    .share-link {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 16px 32px;
+      font-size: 17px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--yes) 0%, var(--yesHover) 100%);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(255, 107, 157, 0.4);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .share-link:hover {
+      transform: translateX(-50%) translateY(-3px);
+      box-shadow: 0 12px 32px rgba(255, 107, 157, 0.5);
+    }
+
+    .share-link:active {
+      transform: translateX(-50%) translateY(-1px);
+    }
+
+    /* CREATE NEW BUTTON */
+    .create-new {
+      margin-top: 20px;
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: 600;
+      background: transparent;
+      color: var(--yes);
+      border: 3px solid var(--yes);
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .create-new:hover {
+      background: var(--yes);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3);
+    }
+
+    /* TOAST MESSAGE */
+    .toast {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: linear-gradient(135deg, var(--yes) 0%, var(--yesHover) 100%);
+      color: #fff;
+      padding: 16px 28px;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: 600;
+      z-index: 10001;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      pointer-events: none;
+      box-shadow: 0 8px 24px rgba(255, 107, 157, 0.4);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    @keyframes pop {
+      0% { 
+        transform: scale(0.8); 
+        opacity: 0; 
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% { 
+        transform: scale(1); 
+        opacity: 1; 
+      }
+    }
+
+    /* MOBILE OPTIMIZATIONS */
+    @media (max-width: 480px) {
+      .card {
+        padding: 24px 20px 90px;
+        border-radius: 28px;
+      }
+
+      h1 {
+        font-size: 24px;
+        margin: 12px 0 16px;
+      }
+
+      .name-input {
+        font-size: 16px;
+        padding: 14px 18px;
+        border-radius: 18px;
+      }
+
+      .submit-btn {
+        font-size: 16px;
+        padding: 14px 32px;
+      }
+
+      .share-link {
+        font-size: 15px;
+        padding: 14px 28px;
+        bottom: 20px;
+        width: calc(100% - 32px);
+        max-width: 400px;
+        justify-content: center;
+      }
+
+      button {
+        font-size: 16px;
+        padding: 16px 24px;
+      }
+
+      .button-zone {
+        height: 120px;
+      }
+
+      .toast {
+        font-size: 14px;
+        padding: 14px 24px;
+        bottom: 90px;
+      }
+
+      .art {
+        width: min(240px, 70vw);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="confettiCanvas"></canvas>
+
+  <main class="card">
+    <!-- ROMANTIC HEARTS ILLUSTRATION -->
+    <svg class="art" viewBox="0 0 320 280" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="heartGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ff6b9d" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#ff4d8a" stop-opacity="1"/>
+        </linearGradient>
+        <linearGradient id="heartGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ffb3d1" stop-opacity="0.8"/>
+          <stop offset="100%" stop-color="#ff8cc8" stop-opacity="0.9"/>
+        </linearGradient>
+        <linearGradient id="heartGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ffcfe0" stop-opacity="0.7"/>
+          <stop offset="100%" stop-color="#ffb3d1" stop-opacity="0.8"/>
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+          <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
+
+      <!-- Main large heart -->
+      <path d="M160 80 C160 60 180 50 190 60
+               C200 50 220 60 220 80
+               C220 110 190 140 160 170
+               C130 140 100 110 100 80
+               C100 60 120 50 130 60
+               C140 50 160 60 160 80 Z"
+            fill="url(#heartGrad1)"
+            filter="url(#glow)"
+            transform="translate(0, 20)"/>
+
+      <!-- Medium heart (left) -->
+      <path d="M80 100 C80 88 92 82 98 88
+               C104 82 116 88 116 100
+               C116 112 98 124 80 140
+               C62 124 44 112 44 100
+               C44 88 56 82 62 88
+               C68 82 80 88 80 100 Z"
+            fill="url(#heartGrad2)"
+            opacity="0.9"/>
+
+      <!-- Medium heart (right) -->
+      <path d="M240 100 C240 88 252 82 258 88
+               C264 82 276 88 276 100
+               C276 112 258 124 240 140
+               C222 124 204 112 204 100
+               C204 88 216 82 222 88
+               C228 82 240 88 240 100 Z"
+            fill="url(#heartGrad2)"
+            opacity="0.9"/>
+
+      <!-- Small hearts floating -->
+      <path d="M50 50 C50 44 54 40 56 42
+               C58 40 62 44 62 50
+               C62 56 56 60 50 68
+               C44 60 38 56 38 50
+               C38 44 42 40 44 42
+               C46 40 50 44 50 50 Z"
+            fill="url(#heartGrad3)"
+            opacity="0.8"/>
+
+      <path d="M270 50 C270 44 274 40 276 42
+               C278 40 282 44 282 50
+               C282 56 276 60 270 68
+               C264 60 258 56 258 50
+               C258 44 262 40 264 42
+               C266 40 270 44 270 50 Z"
+            fill="url(#heartGrad3)"
+            opacity="0.8"/>
+
+      <!-- Sparkles -->
+      <circle cx="70" cy="180" r="3" fill="#ffb3d1" opacity="0.8">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="250" cy="180" r="3" fill="#ffb3d1" opacity="0.8">
+        <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="160" cy="220" r="2.5" fill="#ffcfe0" opacity="0.7">
+        <animate attributeName="opacity" values="0.3;0.9;0.3" dur="1.8s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+
+    <!-- NAME INPUT FORM -->
+    <section class="name-form" id="nameForm">
+      <h1>발렌타인 데이트 신청 만들기</h1>
+      <div class="input-group">
+        <label class="input-label" for="nameInput">받는 사람의 이름을 입력해주세요</label>
+        <input 
+          type="text" 
+          id="nameInput" 
+          class="name-input" 
+          placeholder="이름을 입력하세요"
+          maxlength="20"
+          autocomplete="off"
+        />
+      </div>
+      <button class="submit-btn" id="submitBtn">링크 만들기</button>
+    </section>
+
+    <!-- DATE REQUEST SECTION -->
+    <section class="date-request" id="dateRequest">
+      <h1 id="requestTitle">발렌타인 데이트 신청</h1>
+
+      <section class="button-zone" id="zone">
+        <button id="yesBtn">좋아요</button>
+        <button id="noBtn">싫어요</button>
+      </section>
+
+      <!-- HINT -->
+      <div class="hint" id="hint">"싫어요" 버튼이 도망가네요 😈</div>
+
+      <section class="result" id="result">
+        <h2>와! 좋아요! 🎉</h2>
+        <img
+          class="fireworks"
+          src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
+          alt="Fireworks"
+        />
+        <button class="create-new" id="createNewBtn">나도 만들어서 보내기</button>
+      </section>
+    </section>
+  </main>
+
+  <!-- SHARE LINK BUTTON (Fixed at bottom) -->
+  <button class="share-link" id="shareLinkBtn" style="display: none;">
+    <span>🔗</span>
+    <span>링크 공유하기</span>
+  </button>
+
+  <!-- TOAST MESSAGE -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // URL 파라미터에서 이름 가져오기
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get('name');
+
+    const nameForm = document.getElementById("nameForm");
+    const dateRequest = document.getElementById("dateRequest");
+    const nameInput = document.getElementById("nameInput");
+    const submitBtn = document.getElementById("submitBtn");
+    const requestTitle = document.getElementById("requestTitle");
+    const shareLinkBtn = document.getElementById("shareLinkBtn");
+    const zone = document.getElementById("zone");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const result = document.getElementById("result");
+    const hint = document.getElementById("hint");
+    const createNewBtn = document.getElementById("createNewBtn");
+    const toast = document.getElementById("toast");
+
+    // 현재 입력된 이름 저장 (링크 생성용)
+    let currentName = name ? decodeURIComponent(name) : '';
+
+    // 이름이 있으면 데이트 신청 화면, 없으면 이름 입력 화면
+    if (name) {
+      nameForm.classList.remove("active");
+      dateRequest.classList.add("active");
+      requestTitle.textContent = `${decodeURIComponent(name)}님, 발렌타인 데이트 하실래요?`;
+      shareLinkBtn.style.display = "inline-flex";
+    } else {
+      nameForm.classList.add("active");
+      dateRequest.classList.remove("active");
+      shareLinkBtn.style.display = "none";
+    }
+
+    // 토스트 메시지 표시
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2000);
+    }
+
+    // 링크 생성 함수
+    function generateLink(nameToUse) {
+      const encodedName = encodeURIComponent(nameToUse);
+      return `${window.location.origin}${window.location.pathname}?name=${encodedName}`;
+    }
+
+    // 링크 복사 함수
+    async function copyLink(linkUrl) {
+      try {
+        await navigator.clipboard.writeText(linkUrl);
+        showToast("링크가 복사되었습니다! 📋");
+        return true;
+      } catch (err) {
+        // 복사 실패 시 fallback
+        const textArea = document.createElement("textarea");
+        textArea.value = linkUrl;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+          showToast("링크가 복사되었습니다! 📋");
+          return true;
+        } catch (e) {
+          document.body.removeChild(textArea);
+          showToast("링크 복사에 실패했습니다. 링크를 직접 복사해주세요.");
+          return false;
+        }
+      }
+    }
+
+    // 이름 입력 후 완성된 화면 보여주기
+    submitBtn.addEventListener("click", () => {
+      const inputName = nameInput.value.trim();
+      if (inputName) {
+        currentName = inputName;
+        // 화면 전환
+        nameForm.classList.remove("active");
+        dateRequest.classList.add("active");
+        requestTitle.textContent = `${inputName}님, 발렌타인 데이트 하실래요?`;
+        shareLinkBtn.style.display = "inline-flex";
+      } else {
+        showToast("이름을 입력해주세요!");
+        nameInput.focus();
+      }
+    });
+
+    // 엔터키로 제출
+    nameInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        submitBtn.click();
+      }
+    });
+
+    // 링크 공유 버튼 클릭
+    shareLinkBtn.addEventListener("click", () => {
+      if (currentName) {
+        const linkUrl = generateLink(currentName);
+        copyLink(linkUrl);
+      }
+    });
+
+    // "나도 만들어서 보내기" 버튼
+    createNewBtn.addEventListener("click", () => {
+      window.location.href = window.location.pathname;
+    });
+
+    /* ---------- CONFETTI ---------- */
+    const confettiCanvas = document.getElementById("confettiCanvas");
+
+    function resizeConfettiCanvas() {
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      confettiCanvas.width = Math.floor(window.innerWidth * dpr);
+      confettiCanvas.height = Math.floor(window.innerHeight * dpr);
+      confettiCanvas.style.width = "100vw";
+      confettiCanvas.style.height = "100vh";
+    }
+
+    resizeConfettiCanvas();
+    window.addEventListener("resize", resizeConfettiCanvas);
+    window.addEventListener("orientationchange", () => setTimeout(resizeConfettiCanvas, 150));
+
+    const confettiInstance = confetti.create(confettiCanvas, {
+      resize: false,
+      useWorker: true
+    });
+
+    function fullScreenConfetti() {
+      const end = Date.now() + 1600;
+
+      (function frame() {
+        confettiInstance({
+          particleCount: 12,
+          spread: 90,
+          startVelocity: 45,
+          ticks: 180,
+          origin: { x: Math.random(), y: Math.random() * 0.3 }
+        });
+        if (Date.now() < end) requestAnimationFrame(frame);
+      })();
+
+      setTimeout(() => {
+        confettiInstance({
+          particleCount: 300,
+          spread: 140,
+          startVelocity: 60,
+          ticks: 220,
+          origin: { x: 0.5, y: 0.55 }
+        });
+      }, 300);
+    }
+
+    /* ---------- YES BUTTON GROWS ---------- */
+    let yesScale = 1;
+    function growYes() {
+      yesScale = Math.min(2.2, yesScale + 0.1);
+      yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`;
+    }
+
+    /* ---------- NO BUTTON RUNS AWAY ---------- */
+    function clamp(n, min, max) {
+      return Math.max(min, Math.min(max, n));
+    }
+
+    function moveNo(px, py) {
+      const z = zone.getBoundingClientRect();
+      const b = noBtn.getBoundingClientRect();
+
+      let dx = (b.left + b.width / 2) - px;
+      let dy = (b.top + b.height / 2) - py;
+      let mag = Math.hypot(dx, dy) || 1;
+      dx /= mag;
+      dy /= mag;
+
+      let newLeft = (b.left - z.left) + dx * 150;
+      let newTop  = (b.top - z.top) + dy * 150;
+
+      newLeft = clamp(newLeft, 0, z.width - b.width);
+      newTop  = clamp(newTop, 0, z.height - b.height);
+
+      noBtn.style.left = newLeft + "px";
+      noBtn.style.top = newTop + "px";
+      noBtn.style.transform = "none";
+
+      growYes();
+    }
+
+    zone.addEventListener("pointermove", e => {
+      const b = noBtn.getBoundingClientRect();
+      const d = Math.hypot(
+        (b.left + b.width / 2) - e.clientX,
+        (b.top + b.height / 2) - e.clientY
+      );
+      if (d < 140) moveNo(e.clientX, e.clientY);
+    });
+
+    noBtn.addEventListener("click", e => e.preventDefault());
+
+    /* ---------- YES CLICK ---------- */
+    yesBtn.addEventListener("click", () => {
+      zone.style.display = "none";
+      hint.style.display = "none";
+      shareLinkBtn.style.display = "none";
+      result.style.display = "block";
+      resizeConfettiCanvas();
+      fullScreenConfetti();
+    });
+  </script>
+</body>
+</html>
+
