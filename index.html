@@ -7,17 +7,17 @@
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://seulkiko-stack.github.io/valentine/" />
+  <meta property="og:url" content="https://valentine-idus.netlify.app/" />
   <meta property="og:title" content="너에게 할 말이 있어" />
   <meta property="og:description" content="특별한 사람에게 전하는 로맨틱한 메시지" />
-  <meta property="og:image" content="https://seulkiko-stack.github.io/valentine/og-image.svg" />
+  <meta property="og:image" content="https://valentine-idus.netlify.app/og-image.svg" />
   
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://seulkiko-stack.github.io/valentine/" />
+  <meta property="twitter:url" content="https://valentine-idus.netlify.app/" />
   <meta property="twitter:title" content="너에게 할 말이 있어" />
   <meta property="twitter:description" content="특별한 사람에게 전하는 로맨틱한 메시지" />
-  <meta property="twitter:image" content="https://seulkiko-stack.github.io/valentine/og-image.svg" />
+  <meta property="twitter:image" content="https://valentine-idus.netlify.app/og-image.svg" />
 
   <!-- Confetti library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -87,7 +87,7 @@
 
     .card {
       width: min(720px, 92vw);
-      padding: 32px 28px 80px;
+      padding: 32px 28px 100px;
       background: var(--card);
       backdrop-filter: blur(20px);
       border-radius: 32px;
@@ -301,55 +301,65 @@
     /* SHARE LINK BUTTON */
     .share-link {
       position: fixed;
-      bottom: 16px;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 10px 20px;
-      font-size: 14px;
-      font-weight: 600;
+      padding: 18px 32px;
+      font-size: 18px;
+      font-weight: 700;
       background: linear-gradient(135deg, var(--yes) 0%, var(--yesHover) 100%);
       color: #fff;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 4px 16px rgba(255, 107, 157, 0.35);
+      box-shadow: 0 8px 24px rgba(255, 107, 157, 0.4);
       transition: all 0.3s ease;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       z-index: 1000;
       max-width: calc(100% - 40px);
       white-space: nowrap;
     }
 
     .share-link:hover {
-      transform: translateX(-50%) translateY(-3px);
+      transform: translateX(-50%) translateY(-2px);
       box-shadow: 0 12px 32px rgba(255, 107, 157, 0.5);
     }
 
     .share-link:active {
-      transform: translateX(-50%) translateY(-1px);
+      transform: translateX(-50%) translateY(0);
     }
 
     /* CREATE NEW BUTTON */
     .create-new {
-      margin-top: 20px;
-      padding: 14px 28px;
-      font-size: 16px;
-      font-weight: 600;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 18px 32px;
+      font-size: 18px;
+      font-weight: 700;
       background: transparent;
       color: var(--yes);
       border: 3px solid var(--yes);
       border-radius: 50px;
       cursor: pointer;
       transition: all 0.3s ease;
+      z-index: 1000;
+      max-width: calc(100% - 40px);
+      white-space: nowrap;
     }
 
     .create-new:hover {
       background: var(--yes);
       color: #fff;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3);
+      transform: translateX(-50%) translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 107, 157, 0.4);
+    }
+
+    .create-new:active {
+      transform: translateX(-50%) translateY(0);
     }
 
     /* TOAST MESSAGE */
@@ -393,7 +403,7 @@
     /* MOBILE OPTIMIZATIONS */
     @media (max-width: 480px) {
       .card {
-        padding: 24px 20px 70px;
+        padding: 24px 20px 90px;
         border-radius: 28px;
       }
 
@@ -414,15 +424,18 @@
       }
 
       .share-link {
-        font-size: 13px;
-        padding: 8px 16px;
-        bottom: 12px;
-        max-width: calc(100% - 40px);
-        gap: 5px;
+        font-size: 16px;
+        padding: 16px 28px;
+        bottom: 16px;
+        max-width: calc(100% - 32px);
+        gap: 6px;
       }
       
-      .share-link span:first-child {
-        font-size: 12px;
+      .create-new {
+        font-size: 16px;
+        padding: 16px 28px;
+        bottom: 16px;
+        max-width: calc(100% - 32px);
       }
 
       button {
@@ -633,7 +646,7 @@
     // 링크 생성 함수
     function generateLink(nameToUse) {
       const encodedName = encodeURIComponent(nameToUse);
-      return `https://seulkiko-stack.github.io/valentine/?name=${encodedName}`;
+      return `https://valentine-idus.netlify.app/?name=${encodedName}`;
     }
 
     // 링크 복사 함수
