@@ -332,11 +332,9 @@
     }
 
     /* CREATE NEW BUTTON */
+    /* CREATE NEW BUTTON */
     .create-new {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+      margin-top: 20px;
       padding: 12px 24px;
       font-size: 15px;
       font-weight: 600;
@@ -346,21 +344,20 @@
       border-radius: 50px;
       cursor: pointer;
       transition: all 0.3s ease;
-      z-index: 1000;
-      max-width: calc(100% - 40px);
-      white-space: nowrap;
+      display: inline-block;
     }
 
     .create-new:hover {
       background: var(--yes);
       color: #fff;
-      transform: translateX(-50%) translateY(-2px);
+      transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(255, 107, 157, 0.35);
     }
 
     .create-new:active {
-      transform: translateX(-50%) translateY(0);
+      transform: translateY(0);
     }
+
 
     /* TOAST MESSAGE */
     .toast {
@@ -438,8 +435,7 @@
       .create-new {
         font-size: 14px;
         padding: 10px 20px;
-        bottom: 16px;
-        max-width: calc(100% - 32px);
+        margin-top: 16px;
       }
 
       button {
