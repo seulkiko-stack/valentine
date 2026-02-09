@@ -1,0 +1,87 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fff0f8;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ffe5f0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffeef6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="letterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fff8fc;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b9d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff4d8a;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+      <feOffset dx="0" dy="4" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  
+  <!-- Floating hearts background -->
+  <circle cx="200" cy="150" r="40" fill="#ffb3d1" opacity="0.3"/>
+  <circle cx="1000" cy="200" r="35" fill="#ffcfe0" opacity="0.25"/>
+  <circle cx="150" cy="450" r="30" fill="#ffb3d1" opacity="0.2"/>
+  <circle cx="1050" cy="480" r="45" fill="#ffcfe0" opacity="0.3"/>
+  
+  <!-- Main letter/envelope -->
+  <g transform="translate(600, 315)">
+    <!-- Letter paper -->
+    <rect x="-200" y="-180" width="400" height="360" rx="12" fill="url(#letterGrad)" filter="url(#shadow)"/>
+    
+    <!-- Letter fold line -->
+    <line x1="-200" y1="-100" x2="200" y2="-100" stroke="#ffcfe0" stroke-width="2" stroke-dasharray="5,5" opacity="0.5"/>
+    
+    <!-- Heart seal -->
+    <path d="M 0 -120 C 0 -140 20 -150 30 -140 C 40 -150 60 -140 60 -120 C 60 -90 30 -60 0 -30 C -30 -60 -60 -90 -60 -120 C -60 -140 -40 -150 -30 -140 C -20 -150 0 -140 0 -120 Z" 
+          fill="url(#heartGrad)" filter="url(#shadow)"/>
+    
+    <!-- Text lines on letter -->
+    <line x1="-150" y1="-50" x2="150" y2="-50" stroke="#ffb3d1" stroke-width="3" opacity="0.4"/>
+    <line x1="-150" y1="0" x2="120" y2="0" stroke="#ffb3d1" stroke-width="3" opacity="0.4"/>
+    <line x1="-150" y1="50" x2="100" y2="50" stroke="#ffb3d1" stroke-width="3" opacity="0.4"/>
+    
+    <!-- Small hearts decoration -->
+    <path d="M -120 80 C -120 70 -110 65 -105 70 C -100 65 -90 70 -90 80 C -90 95 -105 105 -105 115 C -105 105 -90 95 -90 80 Z" 
+          fill="#ffb3d1" opacity="0.6"/>
+    <path d="M 90 80 C 90 70 100 65 105 70 C 110 65 120 70 120 80 C 120 95 105 105 105 115 C 105 105 120 95 120 80 Z" 
+          fill="#ffb3d1" opacity="0.6"/>
+  </g>
+  
+  <!-- Title text -->
+  <text x="600" y="100" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="#5a3a4a" text-anchor="middle">
+    너에게 할 말이 있어
+  </text>
+  
+  <!-- Decorative hearts around title -->
+  <path d="M 300 80 C 300 60 320 50 330 60 C 340 50 360 60 360 80 C 360 100 330 120 300 140 C 270 120 240 100 240 80 C 240 60 260 50 270 60 C 280 50 300 60 300 80 Z" 
+        fill="#ff6b9d" opacity="0.3"/>
+  <path d="M 900 80 C 900 60 920 50 930 60 C 940 50 960 60 960 80 C 960 100 930 120 900 140 C 870 120 840 100 840 80 C 840 60 860 50 870 60 C 880 50 900 60 900 80 Z" 
+        fill="#ff6b9d" opacity="0.3"/>
+  
+  <!-- Sparkles -->
+  <circle cx="250" cy="120" r="4" fill="#ffb3d1" opacity="0.8">
+    <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="950" cy="120" r="4" fill="#ffb3d1" opacity="0.8">
+    <animate attributeName="opacity" values="0.4;1;0.4" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="350" cy="500" r="3" fill="#ffcfe0" opacity="0.7">
+    <animate attributeName="opacity" values="0.3;0.9;0.3" dur="1.8s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="850" cy="500" r="3" fill="#ffcfe0" opacity="0.7">
+    <animate attributeName="opacity" values="0.3;0.9;0.3" dur="2.2s" repeatCount="indefinite"/>
+  </circle>
+</svg>
+

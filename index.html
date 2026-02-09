@@ -3,7 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>발렌타인 데이트 신청</title>
+  <title>너에게 할 말이 있어</title>
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://idus.github.io/valentine/" />
+  <meta property="og:title" content="너에게 할 말이 있어" />
+  <meta property="og:description" content="특별한 사람에게 전하는 로맨틱한 메시지" />
+  <meta property="og:image" content="https://idus.github.io/valentine/og-image.svg" />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://idus.github.io/valentine/" />
+  <meta property="twitter:title" content="너에게 할 말이 있어" />
+  <meta property="twitter:description" content="특별한 사람에게 전하는 로맨틱한 메시지" />
+  <meta property="twitter:image" content="https://idus.github.io/valentine/og-image.svg" />
 
   <!-- Confetti library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
@@ -73,7 +87,7 @@
 
     .card {
       width: min(720px, 92vw);
-      padding: 32px 28px 100px;
+      padding: 32px 28px 80px;
       background: var(--card);
       backdrop-filter: blur(20px);
       border-radius: 32px;
@@ -287,23 +301,24 @@
     /* SHARE LINK BUTTON */
     .share-link {
       position: fixed;
-      bottom: 30px;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 16px 32px;
-      font-size: 17px;
+      padding: 12px 24px;
+      font-size: 15px;
       font-weight: 700;
       background: linear-gradient(135deg, var(--yes) 0%, var(--yesHover) 100%);
       color: #fff;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 8px 24px rgba(255, 107, 157, 0.4);
+      box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
       transition: all 0.3s ease;
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       z-index: 1000;
+      max-width: calc(100% - 32px);
     }
 
     .share-link:hover {
@@ -377,7 +392,7 @@
     /* MOBILE OPTIMIZATIONS */
     @media (max-width: 480px) {
       .card {
-        padding: 24px 20px 90px;
+        padding: 24px 20px 70px;
         border-radius: 28px;
       }
 
@@ -398,11 +413,11 @@
       }
 
       .share-link {
-        font-size: 15px;
-        padding: 14px 28px;
-        bottom: 20px;
+        font-size: 14px;
+        padding: 10px 20px;
+        bottom: 16px;
         width: calc(100% - 32px);
-        max-width: 400px;
+        max-width: 320px;
         justify-content: center;
       }
 
@@ -594,7 +609,7 @@
     if (name) {
       nameForm.classList.remove("active");
       dateRequest.classList.add("active");
-      requestTitle.textContent = `${decodeURIComponent(name)}님, 발렌타인 데이트 하실래요?`;
+      requestTitle.textContent = `${decodeURIComponent(name)}, 나의 발렌타인이 되어줄래?`;
       shareLinkBtn.style.display = "inline-flex";
     } else {
       nameForm.classList.add("active");
@@ -614,7 +629,7 @@
     // 링크 생성 함수
     function generateLink(nameToUse) {
       const encodedName = encodeURIComponent(nameToUse);
-      return `${window.location.origin}${window.location.pathname}?name=${encodedName}`;
+      return `https://idus.github.io/valentine/?name=${encodedName}`;
     }
 
     // 링크 복사 함수
@@ -652,7 +667,7 @@
         // 화면 전환
         nameForm.classList.remove("active");
         dateRequest.classList.add("active");
-        requestTitle.textContent = `${inputName}님, 발렌타인 데이트 하실래요?`;
+        requestTitle.textContent = `${inputName}, 나의 발렌타인이 되어줄래?`;
         shareLinkBtn.style.display = "inline-flex";
       } else {
         showToast("이름을 입력해주세요!");
